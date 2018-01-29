@@ -11,6 +11,7 @@ output:
 ```r
 df <- read.csv("activity.csv")
 df$date <- as.Date(as.character(df$date), "%Y-%m-%d")
+library(ggplot2)
 ```
 
 ## What is mean total number of steps taken per day?
@@ -18,8 +19,10 @@ df$date <- as.Date(as.character(df$date), "%Y-%m-%d")
 ```r
 hist_mean_med <- function(df)
 {
+  
   h <- setNames(aggregate(df$steps, list(df$date), sum), c("day", "steps"))
-  hist(h$steps, 10, main="Step frequency", xlab="Total number of steps a day")
+  print(ggplot(h, aes(day, steps)) + geom_col())
+
   print("mean")
   print(mean(h$steps))
   print("median")
@@ -27,6 +30,10 @@ hist_mean_med <- function(df)
 }
 
 hist_mean_med(df)
+```
+
+```
+## Warning: Removed 8 rows containing missing values (position_stack).
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
@@ -66,6 +73,23 @@ df_fix[is.na(df_fix$steps)  , "steps"] <- mean(df_fix$steps, na.rm=TRUE)
 ```
 
 
+## Histogram, mean, mode again
+
+```r
+hist_mean_med(df_fix)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+```
+## [1] "mean"
+## [1] 10766.19
+## [1] "median"
+## [1] 10766.19
+```
+
+
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ```r
@@ -99,4 +123,4 @@ g <- lineplot( df_fix[!isWeekends, ] )
 axis(side=1)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
